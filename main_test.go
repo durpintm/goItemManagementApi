@@ -32,8 +32,16 @@ func TestGreetHandler(t *testing.T) {
 	router := mux.NewRouter()
 	router.HandleFunc("/items", getItemsHandler).Methods("GET")
 	router.ServeHTTP(rr, req)
+	// Check the status code of the response
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("The GET [getItemsHandler] returned wrong status code: got %v want %v", status, http.StatusOK)
+	}
 
-	
+	// Check the content type of the response
+	if contentType := rr.Header().Get("Content-Type"); contentType != "application/json" {
+		t.Errorf("The GET [getItemsHandler] returned unexpected content type: got %v want %v", contentType, "application/json")
+	}
+
 }
 
 func TestAddItemHandler(t *testing.T) {
@@ -54,8 +62,4 @@ func TestAddItemHandler(t *testing.T) {
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	
 }
-
-
-
