@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 )
 
 // Item struct represents an item with ID and Name
@@ -18,11 +19,18 @@ var items = []Item{} // In-memory storage for items
 const Dport = ":8000"
 
 func main() {
-	http.HandleFunc("/items", getItemsHandler)
-	http.HandleFunc("/items/create", addItemHandler)
+
+	router := mux.NewRouter()
+
+	router.HandleFunc("/items/create", addItemHandler).Methods("POST")
+	router.HandleFunc("/items", getItemsHandler).Methods("GET")
+
+	// http.HandleFunc("/items", getItemsHandler)
+	// http.HandleFunc("/items/create", addItemHandler)
 
 	fmt.Printf("Server is starting on port: %v\n", Dport) // Added newline for better terminal output
-	http.ListenAndServe(Dport, nil)
+	http.ListenAndServe(Dport, router)
+		// http.ListenAndServe(Dport, nil)
 }
 
 // this handler retrieves a list of all items
