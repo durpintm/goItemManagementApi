@@ -36,6 +36,10 @@ func main() {
 // this handler retrieves a list of all items
 func getItemsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+
+	//For testing purpose only -- uncomment to test
+	// items = append(items, Item{ID: uuid.New().String(), Name: "Item 1"})
+  // items = append(items, Item{ID: uuid.New().String(), Name: "Item 2"})	
 	json.NewEncoder(w).Encode(items)
 }
 
@@ -50,6 +54,7 @@ func addItemHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Generate an unique ID for the new item 
 	newItem.ID = uuid.New().String()
+	// newItem.Name = "Laptop" //For testing
 	items = append(items, newItem)
 
 	w.Header().Set("Content-Type", "application/json")
