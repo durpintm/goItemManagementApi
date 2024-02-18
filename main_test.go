@@ -73,5 +73,18 @@ func TestAddItemHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 	req.Header.Set("Content-Type", "application/json")
+	
+	// Create a ResponseRecorder to record the response
+	rr := httptest.NewRecorder()
+
+	// Create a new router and handle the request
+	router := mux.NewRouter()
+	router.HandleFunc("/items/create", addItemHandler).Methods("POST")
+	router.ServeHTTP(rr, req)
+
+	// Check the status code of the response
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("The POST [addItemHandler] returned wrong status code: got %v want %v", status, http.StatusOK)
+	}
 
 }
