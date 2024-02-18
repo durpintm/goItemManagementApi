@@ -41,8 +41,20 @@ func TestGreetHandler(t *testing.T) {
 	if contentType := rr.Header().Get("Content-Type"); contentType != "application/json" {
 		t.Errorf("The GET [getItemsHandler] returned unexpected content type: got %v want %v", contentType, "application/json")
 	}
+	// Decode the response body and check if it's empty
+var responseItems []Item
+err = json.Unmarshal(rr.Body.Bytes(), &responseItems)
+
+if err != nil {
+	t.Errorf("Encountered error decoding response body: %v", err)
+}
+
+if len(responseItems) != len(items) {
+	t.Errorf("The GET [getItemsHandler] returned unexpected number of items: got %d want %d", len(responseItems), len(items))
+}
 
 }
+
 
 func TestAddItemHandler(t *testing.T) {
 	// Create a new item to add
