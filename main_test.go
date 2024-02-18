@@ -87,4 +87,15 @@ func TestAddItemHandler(t *testing.T) {
 		t.Errorf("The POST [addItemHandler] returned wrong status code: got %v want %v", status, http.StatusOK)
 	}
 
+	// Decode the response body and check if it matches the added item
+	var responseItem Item
+	err = json.Unmarshal(rr.Body.Bytes(), &responseItem)
+	if err != nil {
+		t.Errorf("Encountered error decoding response body: %v", err)
+	}
+
+	if responseItem.Name != newItem.Name {
+		t.Errorf("The POST [addItemHandler] returned unexpected item name: got %v want %v", responseItem.Name, newItem.Name)
+	}
+
 }
